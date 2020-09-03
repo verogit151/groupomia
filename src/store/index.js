@@ -6,7 +6,8 @@ Vue.use(Vuex, axios)
 
 export default new Vuex.Store({
 	state: {
-        posts: []
+		posts: [],
+		comments: []
     },
 	actions: {
 		loadPosts({commit}) {
@@ -15,6 +16,18 @@ export default new Vuex.Store({
                     console.log(response.data)
                     let posts = response.data
                     commit('SET_POSTS', posts)
+                }).catch(error => {
+                    console.log(error)
+                })
+		},
+		loadComments({commit}, article) {
+			const articleId = article.articleId
+			console.log("article" + articleId)
+			axios.get("http://localhost:3000/api/articles/comments/" + articleId
+                ).then(response => {
+					let comments = response.data
+					console.log(JSON.parse(JSON.stringify(comments)))
+                    commit('SET_COMMENTS', comments)
                 }).catch(error => {
                     console.log(error)
                 })
@@ -28,6 +41,9 @@ export default new Vuex.Store({
 	mutations: {
 		SET_POSTS(state, posts) {
 			state.posts = posts
+		},
+		SET_COMMENTS(state, comments) {
+			state.comments = comments
 		}
 	}
 })

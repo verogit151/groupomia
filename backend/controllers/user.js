@@ -31,8 +31,13 @@ exports.signup = (req, res, next) => {
               message:
                 err.message || "Some error occurred while creating the User."
             })
-          else res.send(data)
-          // return res.status(201).json({ message: 'Utilisateur créé !' })
+          else //res.send(data)
+
+            return res.status(201).json({ 
+                      userId: data.id,
+                      token: jwt.sign({ userId: data.id }, 'RANDOM_TOKEN_SECRET', { expiresIn: '24h' }),
+                      roleId: data.role_id
+            })
           //next()
         })
       })
@@ -70,7 +75,8 @@ exports.login = (req, res) => {
                 { userId: data.id },
                 'RANDOM_TOKEN_SECRET',
                 { expiresIn: '24h' }
-              )
+              ),
+              roleId: data.role_id
             })
           })
           .catch(error => res.status(500).json({ error }))
@@ -96,6 +102,21 @@ exports.getOneUser = (req, res) => {
       }
   })
 }
+
+//Affichage de tous les utilisateurs
+exports.getAllUser = (req, res) => {
+  console.log("getAllUser")
+  User.findAll((err, data) => {
+    console.log("findAll")
+      if (err) {
+          res.status(500).send({
+            message: "Erreur de récupération des utilisateurs" + err.message
+          })
+      }
+      else  res.send(data)
+  })
+}
+
 
 //Modification d'une sauce
 // exports.modifySauce = (req, res, next) => {

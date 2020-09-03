@@ -56,11 +56,12 @@ import axios from 'axios'
                 }
                 axios.post("http://localhost:3000/api/auth/signup/", {  user:user
                 }).then(response => {
-                        this.userId = response.data.id
-                        console.log(this.userId)
+                        this.userId = response.data.userId
+                        this.roleId = response.data.roleId
                         this.$emit("authenticated", true)
                         this.$router.replace({ name: "home" })
                         localStorage.setItem("userId",this.userId)
+                        localStorage.setItem("roleId",this.roleId)
                 }).catch(() => {
                     console.log("nok")
                     this.errorMessage = "Les informations sont incorrectes"

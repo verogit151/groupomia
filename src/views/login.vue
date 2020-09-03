@@ -42,9 +42,11 @@ export default {
                     axios.post("http://localhost:3000/api/auth/login/", {  user:user 
                     }).then(response => {
                         this.userId = response.data.userId
+                        this.roleId = response.data.roleId
                         this.$emit("authenticated", true)
                         this.$router.replace({ name: "home" })
                         localStorage.setItem("userId",this.userId)
+                        localStorage.setItem("roleId",this.roleId)
                     }).catch(() => {
                         console.log("incorrect")
                         this.errorMessage = "L'email et/ou le mot de passe est incorrect"

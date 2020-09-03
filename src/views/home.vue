@@ -17,16 +17,24 @@ import ListArticle from "../components/ListArticle"
 export default {
   name: 'app',
   methods: {
-    createArticle(newArticle){
+    createArticle(newArticle, formdata){
       console.log("création article")
-      console.log(newArticle)
-      axios.post("http://localhost:3000/api/articles", {  article:newArticle },{ headers:
-      { 'Content-Type': 'multipart/form-data' }
-      }).then(response => {
+      axios.post("http://localhost:3000/api/articles", {  article:newArticle
+      }, 
+      ).then(response => {
           this.user = response
-         // if (response.status === 200) {
-            console.log(response)
-          //} 
+          this.articles_id = response.data.id
+          console.log(formdata)
+          if (formdata) {
+            console.log("deuxieme axios")
+            axios.put("http://localhost:3000/api/articles/" + this.articles_id, formdata,
+            ).then(response => {
+                this.user = response
+                  console.log("image ajoutée")
+            }).catch(() => {
+                this.errorMessage = "NOK !!!"
+            })
+          }
       }).catch(() => {
           this.errorMessage = "NOK !!!"
       })

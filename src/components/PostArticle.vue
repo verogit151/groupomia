@@ -24,14 +24,7 @@
 
                   <button type="button"  class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }" @click="commands.heading({level: 3})">
                       <b>Titre</b>
-                </button>
-
-                <!-- <button class="menubar__button"  @click="commands.link">
-                    <font-awesome-icon icon="link" />
-                </button> -->
-                <!-- <button class="menubar__button" @click="loadImage(commands.image)">
-                    <font-awesome-icon icon="image" />
-                </button> -->
+                  </button>
 
                   <button type="button"  class="menubar__button" @click="commands.undo">
                       <font-awesome-icon icon="undo" />
@@ -48,7 +41,7 @@
           <editor-content class="editor__content" :editor="editor" /> 
           <p class="fileUp">
             <label for="image">Téléchargez un fichier</label>
-            <img v-if="url" :src="url" class="upload-image" />
+            <img v-if="url" :src="url" class="upload-image"/>
             <input type="file" accept="image/jpeg" name="image" @change="onFileSelected"/>
           </p>
           <p><button type="submit">Publier un article</button></p>
@@ -61,18 +54,15 @@
 </template>
 
 <script>
-
 import moment from 'moment'
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
   Heading,
   Bold,
   Italic,
-  Link,
   Strike,
   Underline,
   History,
-  Image,
   Placeholder,
 } from 'tiptap-extensions'
 export default {
@@ -85,13 +75,11 @@ export default {
       editor: new Editor({
         extensions: [
           new Heading({levels: [1,2,3]}),
-          new Link(),
           new Bold(),
           new Italic(),
           new Strike(),
           new Underline(),
           new History(),
-          new Image(),
           new Placeholder({
             emptyEditorClass: 'is-editor-empty',
             emptyNodeClass: 'is-empty',
@@ -101,34 +89,36 @@ export default {
           }),
         ],
         content: ``,
-        previewImage:null,
-        config: null
+        previewImage:null
       }),
-      selectedFile: null,
+      selectedFile: ``,
       url: null
     }
   },
  
   methods:{
       submit() {
-        const fd = new FormData()
-        fd.append('image', this.selectedFile, this.selectedFile.name)
+        const formData = new FormData()
+        formData.append("image", this.selectedFile, this.selectedFile.name)
+        formData.append("legend", this.selectedFile.legend)
+        
         this.$emit("submit", {
           content: this.editor.getHTML(),
-          image: this.selectedFile.name,
-          video: "yyy",
+          image: "",
           author_users_id: localStorage.getItem("userId"),
-          date: moment().format()
-        })
+          date: moment().format(),
+        }, formData)
       },
       onFileSelected(e) {
         //preview 
+        console.log(e)
         this.selectedFile = e.target.files[0]
-        const image = e.target.files[0]
-        this.url = URL.createObjectURL(image)
+        this.url = URL.createObjectURL(this.selectedFile)
+        console.log(URL)
       },
   },
   beforeDestroy() {
+    console.log("destroy")
     this.editor.destroy()
   },
 }
@@ -171,5 +161,10 @@ export default {
   }
   .menubar__button {
     margin: 0.3em;
+  }
+  .upload-image{
+    max-height: 100px;
+    display:block;
+    margin-top:10px;
   }
 </style>

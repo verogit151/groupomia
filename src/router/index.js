@@ -4,6 +4,8 @@ import LoginComponent from "../views/login.vue"
 import SignupComponent from "../views/signup.vue"
 import HomeComponent from "../views/home.vue"
 import AccountComponent from "../views/account.vue"
+import UsersComponent from "../views/users.vue"
+
 
 Vue.use(VueRouter)
 
@@ -33,7 +35,13 @@ const routes = [
         path: "/account",
         name: "account",
         component: AccountComponent
+    },
+    {
+        path: "/users",
+        name: "users",
+        component: UsersComponent
     }
+
 ]
 
 const router = new VueRouter({

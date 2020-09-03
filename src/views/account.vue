@@ -11,17 +11,9 @@
           <b-col cols=4><label for="surname">Nom *</label></b-col>
           <b-col cols=4><input type="text"  v-model="surname" /></b-col>
         </b-row>
-        <!-- <p>
-          <label for="email">Email</label>
-          <input type="email"  :value="email" />
-        </p>
-        <p>
-          <label for="password">Mot de passe</label>
-          <input type="password"  :value="password" />
-        </p> -->
-        <b-button type="button" v-on:click="updateUser()" class="bouton">Modifier votre compte</b-button>
+        <b-button type="button" v-on:click="updateUser()" class="bouton">Modifier</b-button>
         <!-- <button type="button">Annuler</button> -->
-        <b-button type="button" v-on:click="deleteUser()" class="bouton">Supprimer votre compte</b-button> 
+        <b-button type="button" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
       </form>
     </b-col>
   </b-row>
@@ -33,9 +25,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      userId: localStorage.getItem("userId"),
-      // email: "",
-      // password: "",
+      userId: this.$route.query.id,
       firstname: "",
       surname: ""
     }
@@ -43,8 +33,6 @@ export default {
   mounted () {
     axios.get("http://localhost:3000/api/auth/" + this.userId
       ).then(response => {
-        // this.email = response.data.email
-        // this.password = response.data.password
         this.firstname = response.data.firstname
         this.surname = response.data.surname
         console.log(response.data)
@@ -58,7 +46,12 @@ export default {
       type: String,
       default: ""
     },
+    // userId: {
+    //   type: Number,
+    //   default: localStorage.getItem("userId")
+    // }
   },
+
   methods: {
     updateUser() {
       if(this.firstname != "" && this.surname != "" ) {
@@ -87,9 +80,8 @@ export default {
             this.errorMessage = "L'utilisateur n'a pas été supprimé"
         })
     }
-  },
-  components: {  }
-};
+  }
+}
 </script>
 
 <style scoped>

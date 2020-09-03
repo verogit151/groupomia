@@ -5,8 +5,9 @@
                 <b-col>
                     <div class="nav" v-if="authenticated">
                         <router-link to="/home"><img src="./assets/Groupomia_Logos/icon-left-font-monochrome-black.svg" alt="Logo Groupomia"/></router-link>
-                        <span class="menu"> 
-                            <router-link to="/account">Mon compte</router-link><span class="navmenu_sep"> | </span>
+                        <span class="menu">
+                            <router-link v-if="roleId==1" to="/users">Les utilisateurs</router-link>
+                            <router-link v-if="roleId==2" to="/account">Mon compte</router-link>
                             <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Se déconnecter</router-link>
                         </span>
                     </div>
@@ -29,7 +30,9 @@
         name: 'App',
         data() {
             return {
-                authenticated: false
+                authenticated: false,
+                userId: localStorage.getItem("userId"),
+                roleId: localStorage.getItem("roleId")
             }
         },
         mounted() {
@@ -43,8 +46,10 @@
             },
             logout() {
                 this.authenticated = false
+                localStorage.clear()
             }
-        }
+        },
+        
     }
 </script>
 

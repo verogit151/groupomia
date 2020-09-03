@@ -58,6 +58,21 @@ User.findOne = (userId, result) => {
   })
 }
 
+User.findAll = result => {
+  console.log("requete")
+  sql.query(`SELECT * FROM users`, (err, res) => {
+    if (err) {
+      console.log("error: ", err)
+      result(null, err)
+      return
+    }
+    else {
+        result(null, res)
+        return
+    }
+  })
+}
+
 User.updateById = (id, user, result) => {
   sql.query(
     "UPDATE users SET firstname = ?, surname = ? WHERE id = ?",
@@ -80,21 +95,6 @@ User.updateById = (id, user, result) => {
     }
   )
 }
-    
-// Customer.getAll = result => {
-//   sql.query("SELECT * FROM customers", (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
-
-//     console.log("customers: ", res);
-//     result(null, res);
-//   });
-// };
-
-
 
 User.deleteOne = (id, result) => {
   sql.query("DELETE FROM users WHERE id = ?", id, (err, res) => {
@@ -112,18 +112,5 @@ User.deleteOne = (id, result) => {
     result(null, res)
   })
 }
-
-// Customer.removeAll = result => {
-//   sql.query("DELETE FROM customers", (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
-
-//     console.log(`deleted ${res.affectedRows} customers`);
-//     result(null, res);
-//   });
-// };
 
 module.exports = User
