@@ -1,4 +1,5 @@
 <template>
+<div>
   <b-row id="users">
     <b-col cols=6 class="listusers">
       <h1>Les utilisateurs</h1>
@@ -14,12 +15,14 @@
               <b-col cols=4>{{ item.surname }} {{ item.firstname }}</b-col>
               <b-col cols=4>{{ item.email }}</b-col>
               <b-col cols=2>
-                <b-icon icon="trash" v-if="users.roleId===1" font-scale="0.8" @click="deleteUser(item.id)" class="trash"></b-icon>
+                <b-icon icon="trash" v-if="item.role_id===2" font-scale="0.8" @click="deleteUser(item.id)" class="trash"></b-icon>
               </b-col>
           </b-row>
       </p>
     </b-col>
   </b-row>
+  <footer>© Groupomania * 2020</footer>
+</div>
 </template>
 
 <script>
@@ -69,6 +72,7 @@ export default {
   #users {
     color: #2c3e50;
     background-color: rgb(245, 245, 245);
+    height: calc(100vh - 68px);
   }
   .listusers {
     margin: 2em auto;

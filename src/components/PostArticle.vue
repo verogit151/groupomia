@@ -23,7 +23,7 @@
                       <font-awesome-icon icon="underline" />
                   </button>
 
-                  <button type="button" aria-label="title" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }" @click="commands.heading({level: 3})">
+                  <button type="button" aria-label="title" class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 2 }) }" @click="commands.heading({level: 3})">
                       <b>Titre</b>
                   </button>
 
@@ -43,7 +43,7 @@
           <p class="fileUp">
             <label for="image">Téléchargez un fichier</label>
             <img v-if="url" :src="url" class="upload-image"/>
-            <input type="file" accept="image/jpeg, image/png, image/gif" name="image" @change="onFileSelected"/>
+            <input type="file" id="image" accept="image/jpeg, image/png, image/gif" name="image" @change="onFileSelected"/>
           </p>
           <p><button @click="submit">Valider</button></p>
         

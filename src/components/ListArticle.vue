@@ -1,5 +1,6 @@
 <template>
-  <div>
+<div>
+  <div class="articles">
     <b-row>
       <b-col cols=12 lg=6 class="listarticle">
         <p class="search">
@@ -15,7 +16,7 @@
           <b-row class="content">
             <b-col class="article__image">
               <span v-if="item.imageURL=='NULL'"><img src="../assets/Groupomia_Logos/icon-above-font.png" alt="groupomia" height="170px"/></span>
-              <span v-else><img :src="item.imageURL" alt="" /></span>
+              <span v-else><img :src="item.imageURL" alt="photo illustrative" /></span>
             </b-col>
             <b-col class="article__content">
               <span v-html="item.content"></span>
@@ -49,6 +50,8 @@
       </b-col>
     </b-row>
   </div>
+  <footer>© Groupomania * 2020</footer>
+</div>
 </template>
 
 <script>
@@ -120,6 +123,9 @@ export default {
 </script>
 
 <style scoped>
+  .articles {
+    background-color: rgb(245, 245, 245);
+  }
   .listarticle {
     margin: auto;
   }

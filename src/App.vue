@@ -4,12 +4,12 @@
       <b-row>
         <b-col class="menubar">
           <div class="nav" v-if="authenticated">
-            <router-link to="/home">
+            <!-- <router-link to="/home"> -->
               <img
                 src="./assets/Groupomia_Logos/icon-left-font-monochrome-black.svg"
                 alt="Logo Groupomia"
               />
-            </router-link>
+            <!-- </router-link> -->
             <span class="menu">
               <router-link to="/home" class="navmenu">Les articles</router-link>
               <router-link v-if="users.roleId===1" to="/users" class="navmenu">Les utilisateurs</router-link>
@@ -78,7 +78,6 @@ body {
     sans-serif;
   font-size: 1rem;
   background-color: rgb(245, 245, 245);
-  height: calc(100vh - 68px);
   padding: 0;
   margin: 0;
 }
@@ -116,6 +115,10 @@ a {
 }
 .routeur-like-active {
   text-decoration: underline;
+}
+footer {
+  font-size: 0.1rm;
+  font-weight: bold;
 }
 @media all and (max-width: 768px) {
 	.menu {

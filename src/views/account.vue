@@ -1,4 +1,5 @@
 <template>
+<div>
   <b-row id="account">
     <b-col cols=6 class="account">
       <h1>Mon compte</h1>
@@ -24,6 +25,8 @@
       </form>
     </b-col>
   </b-row>
+  <footer>© Groupomania * 2020</footer>
+</div>
 </template>
 
 <script>
@@ -86,6 +89,7 @@ export default {
   #account {
     color: #2c3e50;
     background-color: rgb(245, 245, 245);
+    height: calc(100vh - 92px);
   }
   .ligform {
     margin-top: 1em;

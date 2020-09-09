@@ -9,6 +9,7 @@
                <Avatar :username="`${this.users.firstname + ' ' + this.users.surname}`" :size="30"></Avatar>
               <input 
                   type="text" 
+                  aria-label="commentaire"
                   v-model.trim="comment" 
                   class="reply--text" 
                   placeholder="Laisser un commentaire..."

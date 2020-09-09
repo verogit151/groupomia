@@ -1,4 +1,5 @@
 <template>
+<div>
     <div id="app">
         <b-row>
             <b-col cols=12 md=7 xl=5 id="signup">
@@ -26,6 +27,8 @@
             </b-col>
         </b-row>
     </div>
+    <footer>© Groupomania * 2020</footer>
+</div>
 </template>
 
 <script>

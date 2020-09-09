@@ -36,7 +36,7 @@ export default {
   padding: 1em;
   color: #2c3e50;
   background-color: rgb(245, 245, 245);
-  height: calc(100% - 68px);
+  height: calc(100vh - 92px);
   text-align: center;
 }
 .hello {
