@@ -44,4 +44,9 @@ export default {
   float: right;
   font-size: 0.8rem;
 }
+@media all and (max-width: 768px) {
+	#app {
+      padding: 0;
+    }
+}
 </style>

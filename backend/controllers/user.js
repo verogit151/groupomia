@@ -54,7 +54,6 @@ exports.login = (req, res) => {
       message: "Content can not be empty!"
     })
   }
-  else {console.log("else")}
   User.findByEmail(reqUser.email, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {

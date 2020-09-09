@@ -15,10 +15,11 @@ Article.create = (newArticle, result) => {
       result(err, null)
       return
     }
-
-    console.log("Article créé: ", { id: res.insertId, ...newArticle })
-    result(null, { id: res.insertId, ...newArticle })
-    return
+    else {
+      console.log("Article créé: ", { id: res.insertId, ...newArticle })
+      result(null, { id: res.insertId, ...newArticle })
+      return
+    }
   })
 }
 

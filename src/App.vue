@@ -77,7 +77,7 @@ body {
   font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     sans-serif;
   font-size: 1rem;
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(245, 245, 245) !important;
   padding: 0;
   margin: 0;
 }
@@ -122,7 +122,12 @@ footer {
 }
 @media all and (max-width: 768px) {
 	.menu {
-        font-size: 0.8em;
+        font-size: 1em;
+    }
+}
+@media all and (max-width: 505px) {
+	.menu {
+        font-size: 0.7em;
     }
 }
 </style>

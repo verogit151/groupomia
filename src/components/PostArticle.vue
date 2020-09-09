@@ -45,8 +45,9 @@
             <img v-if="url" :src="url" class="upload-image"/>
             <input type="file" id="image" accept="image/jpeg, image/png, image/gif" name="image" @change="onFileSelected"/>
           </p>
-          <p><button @click="submit">Valider</button></p>
-        
+        <p>
+          <input type="submit" value="Valider" >
+        </p>
         </form>
       </div>
     </b-col>
@@ -222,5 +223,19 @@ export default {
     max-height: 100px;
     display:block;
     margin-top:10px;
+  }
+  @media all and (max-width: 768px) {
+    h1 {
+      font-size: 1.4rem !important;
+    }
+    .editor__content {
+      font-family: 'Trebuchet MS', sans-serif, Arial, "Noto Sans", sans-serif;
+      font-size: 0.7rem;
+      margin: 0;
+    }
+    .fileUp {
+      margin-left: 0;
+      font-size: 0.7em;
+    }
   }
 </style>

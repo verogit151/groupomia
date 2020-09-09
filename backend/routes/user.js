@@ -11,6 +11,4 @@ router.post('/login', userCtrl.login)
 router.put('/:id', userCtrl.modifyUser)
 router.delete('/:id', userCtrl.deleteUser)
 
-// router.delete('/:id', userCtrl.deleteUser);
-
 module.exports = router

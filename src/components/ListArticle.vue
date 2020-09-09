@@ -2,7 +2,7 @@
 <div>
   <div class="articles">
     <b-row>
-      <b-col cols=12 lg=6 class="listarticle">
+      <b-col cols=6 class="listarticle">
         <p class="search">
           <label for="search">Rechercher</label>
           <input type="text" id="search" v-model="search"/>
@@ -14,11 +14,11 @@
             </b-col>
           </b-row>
           <b-row class="content">
-            <b-col class="article__image">
+            <b-col cols=12 md=5 class="article__image">
               <span v-if="item.imageURL=='NULL'"><img src="../assets/Groupomia_Logos/icon-above-font.png" alt="groupomia" height="170px"/></span>
               <span v-else><img :src="item.imageURL" alt="photo illustrative" /></span>
             </b-col>
-            <b-col class="article__content">
+            <b-col cols=12 md=6 class="article__content">
               <span v-html="item.content"></span>
             </b-col>
             <span v-if="users.roleId===1" class="delarticle">
@@ -193,5 +193,12 @@ export default {
     margin: 0.2em;
     padding-bottom: 0.5em; 
   }
-
+  @media all and (max-width: 768px) {
+    .content_footer {
+      padding-left: 1.5em; 
+    }
+    .author {
+      padding-right: 2em;
+    }
+  }
 </style>

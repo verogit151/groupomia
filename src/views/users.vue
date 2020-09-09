@@ -1,27 +1,26 @@
 <template>
 <div>
-  <b-row id="users">
-    <b-col cols=6 class="listusers">
-      <h1>Les utilisateurs</h1>
-        <b-row>
-            <b-col cols=2></b-col>
-            <b-col cols=4>Nom</b-col>
-            <b-col cols=4>Email</b-col>
-            <b-col cols=2></b-col>
-        </b-row>
-      <p v-for="(item) in user" :key="item.id" class="edituser">
+    <b-row id="users">
+      <b-col cols=12 md=10 lg=6 class="listusers">
+        <h1>Les utilisateurs</h1>
           <b-row>
-              <b-col cols=2><Avatar :username="`${item.firstname} ${item.surname}`" :size="25"></Avatar></b-col>
-              <b-col cols=4>{{ item.surname }} {{ item.firstname }}</b-col>
-              <b-col cols=4>{{ item.email }}</b-col>
-              <b-col cols=2>
-                <b-icon icon="trash" v-if="item.role_id===2" font-scale="0.8" @click="deleteUser(item.id)" class="trash"></b-icon>
-              </b-col>
+              <b-col cols=2></b-col>
+              <b-col cols=3>Nom</b-col>
+              <b-col cols=5>Email</b-col>
+              <b-col cols=2></b-col>
           </b-row>
-      </p>
-    </b-col>
-  </b-row>
-  <footer>© Groupomania * 2020</footer>
+        <p v-for="(item) in user" :key="item.id" class="edituser">
+            <b-row>
+                <b-col cols=2><Avatar :username="`${item.firstname} ${item.surname}`" :size="25"></Avatar></b-col>
+                <b-col cols=3>{{ item.surname }} {{ item.firstname }}</b-col>
+                <b-col cols=5>{{ item.email }}</b-col>
+                <b-col cols=2>
+                  <b-icon icon="trash" v-if="item.role_id===2" font-scale="0.8" @click="deleteUser(item.id)" class="trash"></b-icon>
+                </b-col>
+            </b-row>
+        </p>
+      </b-col>
+    </b-row>
 </div>
 </template>
 
@@ -84,5 +83,10 @@ export default {
     padding: 0.3em;
     margin: 0.2em;
     text-align: left;
+  }
+  @media all and (max-width: 768px) {
+    .listusers{
+      font-size: 0.8rem;
+    }
   }
 </style>

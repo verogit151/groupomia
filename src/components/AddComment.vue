@@ -117,5 +117,12 @@ export default {
  input:focus, input:required, input:invalid {
     border-color: silver;
   }
-
+  @media all and (max-width: 768px) {
+    .addcomment {
+      padding: 0 !important;
+    }
+    .reply input[type=text]{
+      font-size: 0.7rem;
+    }
+  }
  </style>

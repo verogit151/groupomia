@@ -1,14 +1,14 @@
 <template>
 <div>
   <b-row id="account">
-    <b-col cols=6 class="account">
+    <b-col cols=12 md=8 lg=6 class="account">
       <h1>Mon compte</h1>
       <form @submit.prevent="submit()">
         <b-row>
-          <b-col cols=2>
-            <Avatar :username="users.firstname+` `+users.surname" :size="60"></Avatar>
+          <b-col cols=1 md=2>
+            <Avatar :username="users.firstname+` `+users.surname" :size="50"></Avatar>
           </b-col>
-          <b-col cols=8>
+          <b-col cols=10>
             <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
             <b-row class="ligform">
               <b-col cols=4><label for="firstname">Prénom *</label></b-col>
@@ -19,7 +19,7 @@
               <b-col cols=4><input type="text" v-model="users.surname" /></b-col>
             </b-row>
             <b-button type="button" v-on:click="updateUser()" class="bouton">Modifier</b-button>
-            <b-button type="button" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
+            <b-button type="button" v-if="users.role_id===2" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
           </b-col>
         </b-row>
       </form>
@@ -104,4 +104,10 @@ export default {
     margin-right: 1em;
   }
   .error { color: tomato; }
+
+  @media all and (max-width: 768px) {
+    .account{
+      font-size: 0.8rem;
+    }
+  }
 </style>  
