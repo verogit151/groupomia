@@ -3,6 +3,8 @@ const ArticleU = require('../models/articleU.model')
 const Comment = require('../models/comment.model')
 const CommentU = require('../models/commentU.model')
 const Like = require('../models/like.model')
+const fs = require('fs')
+// const { faSadCry } = require('@fortawesome/free-solid-svg-icons')
 
 //Ajout d'un article
 exports.createArticle = (req, res, next) => {
@@ -17,8 +19,7 @@ exports.createArticle = (req, res, next) => {
     
     const article = new Article({
       content: reqArticle.content,
-      imageURL: `image`,//`${req.protocol}://${req.get('host')}/images/${req.file.image}`,
-      videoUrl: `video`,//`${req.protocol}://${req.get('host')}/videos/${req.file.video}`,
+      imageURL: `NULL`,
       author_users_id: reqArticle.author_users_id,
       date: reqArticle.date
     })
@@ -36,7 +37,7 @@ exports.createArticle = (req, res, next) => {
 
 //Affichage des articles
 exports.getAllArticle = (req, res, next) => {
-  ArticleU.getAll((err, data) => {
+  ArticleU.getAll(req.params.id, (err, data) => {
     if (err)
     res.status(500).send({
       message:
@@ -92,30 +93,43 @@ exports.addImage = (req, res, next) => {
   const imageURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   Article.createImage(req.params.id, imageURL, (err, data) => {
     if (err)
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while getting the articles."
-    })
-  else res.send(data)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while getting the articles."
+      })
+    else res.send(data)
   })
 }
 
 //Supprimer un article
 exports.deleteArticle = (req, res) => {
-  Article.deleteOne(req.params.id, (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Article introuvable`
-          })
-        } else {
-          res.status(500).send({
-            message: "Erreur de suppression de l'article " + err.message
-          })
-        }
-      } else {
-        res.send(data)
-      }
+  Article.getOne(req.params.id, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while getting the article."
+      })
+    else {
+      const result=JSON.parse(JSON.stringify(data))
+      const filename = result[0].imageURL.split('/images/')[1]
+      fs.unlink(`images/${filename}`, () => {
+        Article.deleteOne(req.params.id, (err, data) => {
+          if (err) {
+            if (err.kind === "not_found") {
+              res.status(404).send({
+                message: `Article introuvable`
+              })
+            } else {
+              res.status(500).send({
+                message: "Erreur de suppression de l'article " + err.message
+              })
+            }
+          } else {
+            res.send(data)
+          }
+        })
+      })
+    }
   })
 }
 
@@ -140,13 +154,18 @@ exports.deleteComment = (req, res) => {
 
 //Liker un article
 exports.likeArticle = (req, res) => {
-  const userId = req.body.userId
-  const like = req.body.like
-  const articles_id = req.params.id
-  console.log("userId" + req.body.userId)
-  console.log("like" + req.body.like)
-  console.log("articles_id" + req.params.id)
-  Like.likeOne(req.params.id, (err, data) => {
+  const reqLike = req.body.like
+  //Validation de la requête
+  if (!reqLike) {
+    res.status(400).send({
+      message: "La requête ne peut être vide!"
+    })
+  }
+  const like = new Like({
+    articles_id: reqLike.articles_id,
+    users_id: reqLike.users_id,
+  })
+  Like.likeOne(like, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
@@ -162,64 +181,28 @@ exports.likeArticle = (req, res) => {
       }
   })
 }
-// exports.likeSauce = (req, res, next) => {
-//   const userId = req.body.userId;
-//   const like = req.body.like;
-//   Sauce.findOne({ _id: req.params.id })
-//       .then((sauce) => {
-//           switch (like) {
-//               case 1 : //like la sauce
-//                   //Vérification de l'absence de l'utilisateur dans le tableau des likes
-//                   if (sauce.usersLiked.indexOf(userId) === -1) {
-//                       if (sauce.usersDisliked.indexOf(userId) > -1) { 
-//                           // suppression du tableau des dislikes si présent 
-//                           sauce.dislikes --;
-//                           sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(userId), 1);
-//                       }
-//                       sauce.usersLiked.push(userId);
-//                       sauce.likes ++;
-//                       const sauceObject = { ...sauce._doc, };
-//                       Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id })
-//                           .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-//                           .catch(error => res.status(400).json({ error }));
-//                   }
-//                   else return res.status(405).send(new Error('Not allowed!'));
-//                   break;
-//               case -1 : //disike la sauce
-//                   //Vérification de l'absence de l'utilisateur dans le tableau des dislikes
-//                   if (sauce.usersDisliked.indexOf(userId) === -1) { 
-//                       if (sauce.usersLiked.indexOf(userId) > -1) {
-//                           // suppression du tableau des likes si présent
-//                           sauce.likes --;
-//                           sauce.usersLiked.splice(sauce.usersLiked.indexOf(userId), 1);
-//                       }
-//                       sauce.usersDisliked.push(userId);
-//                       sauce.dislikes ++;
-//                       const sauceObject = { ...sauce._doc, };
-//                       Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id })
-//                           .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-//                           .catch(error => res.status(400).json({ error }));
-//                   }
-//                   else return res.status(405).send(new Error('Not allowed!'));
-//                   break;
-//               case 0 : 
-//                   //suppression du like sinon dislike
-//                   if (sauce.usersLiked.indexOf(userId) > -1) {
-//                       sauce.likes --;
-//                       sauce.usersLiked.splice(sauce.usersLiked.indexOf(userId), 1);
-//                   }
-//                   else if (sauce.usersDisliked.indexOf(userId) > -1) {
-//                       sauce.dislikes --;
-//                       sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(userId), 1);
-//                   }
-//                   else return res.status(405).send(new Error('Not allowed!'));
-//                   const sauceObject = { ...sauce._doc, };
-//                   Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id })
-//                       .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-//                       .catch(error => res.status(400).json({ error }));
-//                   break;
-//               default : res.status(500).json({ error });
-//           }
-//       })
-//       .catch((error) => res.status(500).json({ error }));
-// }
+//disliker un article
+exports.dislikeArticle = (req, res) => {
+  const reqDislike = req.body.dislike
+  //Validation de la requête
+  if (!reqDislike) {
+    res.status(400).send({
+      message: "La requête ne peut être vide!"
+    })
+  }
+  Like.dislikeOne(reqDislike.articles_id, reqDislike.users_id, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Article introuvable`
+          })
+        } else {
+          res.status(500).send({
+            message: "Erreur de suppression de l'article " + err.message
+          })
+        }
+      } else {
+        res.send(data)
+      }
+  })
+}

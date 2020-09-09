@@ -1,31 +1,24 @@
 <template>
   <div>
-    <b-row>
-      <b-col cols=6 class="listcomment">
-        <p v-for="(item, index) in comments" :key="index" class="editcomment">
-          <span class="Author">{{ item.user }} {{ item.dateform }}</span>
-          <span v-html="item.comment"></span>
-          <button type="button" @click="likeComment(item.comment_id)">Liker</button>
-          <button type="button" v-if="roleId==1" @click="deleteComment(item.comment_id)">Supprimer</button>
-        </p>
+    <b-row class="addcomment">
+      <b-col>
+        
         <form @submit.prevent="submit()">
             <div class="reply">
-                <div class="avatar">
-                    <!-- <img :src="current_user.avatar" alt=""> -->
-                </div>
-                <input type="hidden" v-model="articleId" value="articleId"/>
-                <input 
-                    type="text" 
-                    v-model.trim="comment" 
-                    class="reply--text" 
-                    placeholder="Laisser un commentaire..."
-                    maxlength="250"
-                    required
-                />
-                <button type="submit"
-                    class="reply--button">
-                    <i class="fa fa-paper-plane"></i> Publier
-                </button>
+              <input type="hidden" v-model="articleId" value="articleId"/>
+               <Avatar :username="`${this.users.firstname + ' ' + this.users.surname}`" :size="30"></Avatar>
+              <input 
+                  type="text" 
+                  v-model.trim="comment" 
+                  class="reply--text" 
+                  placeholder="Laisser un commentaire..."
+                  maxlength="250"
+                  required
+              />
+              <button type="submit"
+                  class="reply--button">
+                  Publier
+              </button>
             </div>
         </form>
       </b-col>
@@ -35,8 +28,9 @@
 
 <script>
 import moment from 'moment'
+import Avatar from 'vue-avatar'
 import axios from 'axios'
-//import {mapState} from "vuex"
+import {mapState} from "vuex"
 
 export default {
     name: "AddComment",
@@ -44,7 +38,6 @@ export default {
         return {
             comments: ``,
             comment: ``,
-            roleId: localStorage.getItem("roleId")
         }
     },
     props: {
@@ -54,6 +47,7 @@ export default {
       }
     },
     methods:{
+        //Affichage de la liste des commentaires
         listComments() {
           const articleId = this.articleId
           axios.get("http://localhost:3000/api/articles/comments/" + articleId
@@ -63,16 +57,18 @@ export default {
                 console.log(error)
               })
         },
+        // Ajout d'un nouveau commentaire
         submit() {
             this.$emit("submit", {
-            articles_id: this.articleId,
-            comment: this.comment,
-            author_users_id: localStorage.getItem("userId"),
-            date: moment().format(),
+              articles_id: this.articleId,
+              comment: this.comment,
+              author_users_id: this.users.userId,
+              date: moment().format(),
             })
-            this.comment=``
             this.listComments()
+            this.comment=``
         },
+        // Suppression d'un commentaire (modération Administrateur)
         deleteComment(comment_id) {
           axios.delete("http://localhost:3000/api/articles/comment/" + comment_id, 
             ).then(() => {
@@ -82,35 +78,43 @@ export default {
                 this.errorMessage = "NOK !!!"
             })
         },
-        // likeArticle(articles_id) {
-        //   console.log(articles_id)
-        //   axios.post("http://localhost:3000/api/articles/" + this.userId + "/1",
-        //     ).then(() => {
-        //         // this.$store.dispatch('loadPosts')
-        //         // console.log("article supprimé")
-        //     }).catch(() => {
-        //         this.errorMessage = "NOK !!!"
-        //     })
-        // },
     },
-    mounted() {
-      //this.$store.dispatch('loadComments', {articleId: this.articleId})
-      this.listComments()
-    },
-    // computed: {
-    //   ...mapState(['comments']),
-    // },  
+    components: {    
+        Avatar
+    },  
+    computed: {
+      ...mapState(['users'])
+    }
 }
   
 </script>
 
 <style scoped>
-  .listcomment {
-    margin: auto;
+  .addcomment {
+    margin-top: 1em !important;
+    padding: 0 2em;
+    background-color: white;
+    border-top-left-radius: 0em;
+    border-top-right-radius: 0em;
+    border-bottom-left-radius: 2em;
+    border-bottom-right-radius: 2em;
   }
-  
-  .editcomment {
-    border: rgb(95, 95, 95) 1px solid;
-    text-align: left;
+  .reply {
+    display: flex;
+    background: rgb(245, 245, 245);
+    border-radius: 1.5em;
+    padding: 0.7em;
   }
-</style>
+  .reply input[type=text]{
+    width: 70%;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+  .reply--text {
+    border-color: silver;
+  }
+ input:focus, input:required, input:invalid {
+    border-color: silver;
+  }
+
+ </style>

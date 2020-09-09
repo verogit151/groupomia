@@ -8,10 +8,12 @@ const ArticleU = function(article) {
   this.author_users_id = article.author_users_id
   this.date = article.dateform
   this.user = article.user
+  this.likeArticle = article.likeArticle
+  this.totalLikes = article.totalLikes
 }
 
-ArticleU.getAll = result => {
-  sql.query("SELECT articles.id as articles_id, content, imageURL, author_users_id, DATE_FORMAT(date,'%d/%m/%Y') as dateform, concat(firstname,' ',surname) as user FROM articles INNER JOIN users ON author_users_id=users.id ORDER BY dateform DESC", (err, res) => {
+ArticleU.getAll = (id, result) => {
+  sql.query("SELECT articles.id as articles_id, content, imageURL, author_users_id, DATE_FORMAT(date,'%d/%m/%Y') as dateform, concat(firstname,' ',surname) as user, likes.id as likeArticle, (SELECT COUNT(*) FROM likes AS total WHERE total.articles_id=articles.id) as totalLikes FROM articles INNER JOIN users ON author_users_id=users.id LEFT OUTER JOIN likes ON likes.users_id = ? AND likes.articles_id=articles.id ORDER BY date DESC", id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
@@ -21,74 +23,5 @@ ArticleU.getAll = result => {
     result(null, res)
   })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Customer.updateById = (id, customer, result) => {
-//   sql.query(
-//     "UPDATE customers SET email = ?, name = ?, active = ? WHERE id = ?",
-//     [customer.email, customer.name, customer.active, id],
-//     (err, res) => {
-//       if (err) {
-//         console.log("error: ", err);
-//         result(null, err);
-//         return;
-//       }
-
-//       if (res.affectedRows == 0) {
-//         // not found Customer with the id
-//         result({ kind: "not_found" }, null);
-//         return;
-//       }
-
-//       console.log("updated customer: ", { id: id, ...customer });
-//       result(null, { id: id, ...customer });
-//     }
-//   );
-// };
-
-// Customer.remove = (id, result) => {
-//   sql.query("DELETE FROM customers WHERE id = ?", id, (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
-
-//     if (res.affectedRows == 0) {
-//       // not found Customer with the id
-//       result({ kind: "not_found" }, null);
-//       return;
-//     }
-
-//     console.log("deleted customer with id: ", id);
-//     result(null, res);
-//   });
-// };
-
-// Customer.removeAll = result => {
-//   sql.query("DELETE FROM customers", (err, res) => {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//       return;
-//     }
-
-//     console.log(`deleted ${res.affectedRows} customers`);
-//     result(null, res);
-//   });
-// };
 
 module.exports = ArticleU

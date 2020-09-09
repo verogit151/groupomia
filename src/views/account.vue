@@ -1,19 +1,26 @@
 <template>
-  <b-row>
+  <b-row id="account">
     <b-col cols=6 class="account">
+      <h1>Mon compte</h1>
       <form @submit.prevent="submit()">
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-        <b-row class="ligform">
-          <b-col cols=4><label for="firstname">Prénom *</label></b-col>
-          <b-col cols=4><input type="text"  v-model="firstname" /></b-col>
+        <b-row>
+          <b-col cols=2>
+            <Avatar :username="users.firstname+` `+users.surname" :size="60"></Avatar>
+          </b-col>
+          <b-col cols=8>
+            <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+            <b-row class="ligform">
+              <b-col cols=4><label for="firstname">Prénom *</label></b-col>
+              <b-col cols=4><input type="text" v-model="users.firstname" /></b-col>
+            </b-row>
+            <b-row class="ligform">
+              <b-col cols=4><label for="surname">Nom *</label></b-col>
+              <b-col cols=4><input type="text" v-model="users.surname" /></b-col>
+            </b-row>
+            <b-button type="button" v-on:click="updateUser()" class="bouton">Modifier</b-button>
+            <b-button type="button" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
+          </b-col>
         </b-row>
-        <b-row class="ligform">
-          <b-col cols=4><label for="surname">Nom *</label></b-col>
-          <b-col cols=4><input type="text"  v-model="surname" /></b-col>
-        </b-row>
-        <b-button type="button" v-on:click="updateUser()" class="bouton">Modifier</b-button>
-        <!-- <button type="button">Annuler</button> -->
-        <b-button type="button" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
       </form>
     </b-col>
   </b-row>
@@ -21,41 +28,22 @@
 
 <script>
 import axios from 'axios'
+import { mapState } from "vuex"
+import Avatar from 'vue-avatar'
 
 export default {
-  data() {
-    return {
-      userId: this.$route.query.id,
-      firstname: "",
-      surname: ""
-    }
-  },
-  mounted () {
-    axios.get("http://localhost:3000/api/auth/" + this.userId
-      ).then(response => {
-        this.firstname = response.data.firstname
-        this.surname = response.data.surname
-        console.log(response.data)
-      }).catch(error => {
-        console.log("L'utilisateur " + this.userId + " n'a pas été trouvé:" +  error)
-        this.errorMessage = "L'utilisateur n'a pas été trouvé"
-      })
-  },
   props: {
     errorMessage: {
       type: String,
       default: ""
     },
-    // userId: {
-    //   type: Number,
-    //   default: localStorage.getItem("userId")
-    // }
   },
 
   methods: {
+    // Mise à jour du compte utilisateur
     updateUser() {
-      if(this.firstname != "" && this.surname != "" ) {
-          const user = {firstname: this.firstname, surname: this.surname}
+      if(this.users.firstname != "" && this.users.surname != "" ) {
+          const user = {firstname: this.users.firstname, surname: this.users.surname}
           axios.put("http://localhost:3000/api/auth/"  + this.userId, {  user:user 
           }).then(response => {
               this.user = response
@@ -68,6 +56,7 @@ export default {
           console.log("Des informations sont manquantes")
       }
     },
+    // Suppression du compte utilisateur
     deleteUser() {
       axios.delete("http://localhost:3000/api/auth/" + this.userId
         ).then(response => {
@@ -80,7 +69,13 @@ export default {
             this.errorMessage = "L'utilisateur n'a pas été supprimé"
         })
     }
-  }
+  },
+  components: {    
+    Avatar
+  },  
+  computed: {
+    ...mapState(["users"]),
+  },
 }
 </script>
 
@@ -88,10 +83,19 @@ export default {
   .account {
     margin: 2em auto;
   }
+  #account {
+    color: #2c3e50;
+    background-color: rgb(245, 245, 245);
+  }
   .ligform {
     margin-top: 1em;
     margin-bottom: 1em;
   }
+  input, label {
+    padding: 0.2em;
+    margin: 0.5em;
+    border-radius: 0.5em;
+    }
   .bouton {
     margin-right: 1em;
   }

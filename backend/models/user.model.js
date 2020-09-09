@@ -2,6 +2,7 @@ const sql = require("../bddConnect.js")
 
 // constructor
 const User = function(user) {
+  this.id = user.id
   this.email = user.email
   this.password = user.password
   this.surname = user.surname
@@ -17,15 +18,23 @@ User.create = (newUser, result) => {
       result(err, null)
       return
     }
+    else {
+      newUser.id = res.insertId
+      console.log("Utilisateur créé: ", { ...newUser })
+      result(null, { ...newUser })
+      return
+    }
 
-    console.log("Utilisateur créé: ", { id: res.insertId, ...newUser })
-    result(null, { id: res.insertId, ...newUser })
-    return
+    
   })
 }
 
 User.findByEmail = (emailUser, result) => {
-  sql.query(`SELECT * FROM users WHERE email = "${emailUser}"`, (err, res) => {
+  sql.query(`SELECT users.id, email, password, surname, firstname, COUNT(likes.id) AS karma, role_id 
+             FROM users 
+             LEFT OUTER JOIN articles ON users.id=author_users_id
+             LEFT OUTER JOIN likes ON articles_id=articles.id 
+             WHERE email = "${emailUser}" GROUP BY users.id`, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(err, null)
@@ -37,12 +46,17 @@ User.findByEmail = (emailUser, result) => {
             result(null, res[0])
             return
         }
+        else {
+          console.log("utilisateur non trouvé: ")
+          result(err, null)
+          return
+        }
     }
   })
 }
 
 User.findOne = (userId, result) => {
-  sql.query(`SELECT * FROM users WHERE id = "${userId}"`, (err, res) => {
+  sql.query(`SELECT users.id, email, password, surname, firstname, COUNT(likes.id) AS karma, role_id FROM users LEFT OUTER JOIN likes ON users.id=users_id WHERE users.id = "${userId}" GROUP BY users.id`, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(err, null)

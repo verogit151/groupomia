@@ -22,30 +22,6 @@ Article.create = (newArticle, result) => {
   })
 }
 
-// User.findByEmail = (emailUser, result) => {
-//   sql.query(`SELECT * FROM users WHERE email = "${emailUser}"`, (err, res) => {
-//     if (err) {
-//       console.log("error: ", err)
-//       result(err, null)
-//       return
-//     }
-//     else {
-//         if (res.length > 0) {
-//             console.log("Utilisateur trouvé: ", res[0])
-//             result(null, res[0])
-//             return
-//         }
-//     }
-    
-    
-    // else {
-    //     // not found User with the email
-    //     result({ kind: "not_found" }, null)
-    // }
-//   })
-// }
-
-
 Article.createImage = (id, url, result) => {
   sql.query(
     "UPDATE articles SET imageURL = ? WHERE id = ?",
@@ -82,6 +58,21 @@ Article.deleteOne = (id, result) => {
       return
     }
     console.log("deleted post with id: ", id)
+    result(null, res)
+  })
+}
+
+Article.getOne = (id, result) => {
+  sql.query("SELECT * FROM articles WHERE id = ?", id, (err, res) => {
+    if (err) {
+      result(null, err)
+      return
+    }
+    if (res.affectedRows == 0) {
+      // not found article with the id
+      result({ kind: "not_found" }, null)
+      return
+    }
     result(null, res)
   })
 }

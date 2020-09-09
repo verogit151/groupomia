@@ -1,7 +1,12 @@
 <template>
   <div id="app">
+    <b-row>
+      <b-col>
+        <div class="hello">Bonjour {{ users.firstname }} | Karma : {{ users.karma }}</div>
+      </b-col>
+    </b-row>
     <div class="main">
-      <PostArticle @submit="createArticle"/>
+      <PostArticle/>
       <h1>Les derniers articles</h1>
       <ListArticle/>
     </div>
@@ -10,37 +15,17 @@
 </template>
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
+import { mapState } from "vuex"
 import PostArticle from "../components/PostArticle"
 import ListArticle from "../components/ListArticle"
 
 export default {
   name: 'app',
-  methods: {
-    createArticle(newArticle, formdata){
-      console.log("création article")
-      axios.post("http://localhost:3000/api/articles", {  article:newArticle
-      }, 
-      ).then(response => {
-          this.user = response
-          this.articles_id = response.data.id
-          console.log(formdata)
-          if (formdata) {
-            console.log("deuxieme axios")
-            axios.put("http://localhost:3000/api/articles/" + this.articles_id, formdata,
-            ).then(response => {
-                this.user = response
-                  console.log("image ajoutée")
-            }).catch(() => {
-                this.errorMessage = "NOK !!!"
-            })
-          }
-      }).catch(() => {
-          this.errorMessage = "NOK !!!"
-      })
-    },
+  
+  computed: {
+    ...mapState(["users"]),
   },
-
   components: { PostArticle, ListArticle }
 }
 </script>
@@ -48,20 +33,15 @@ export default {
 <style lang="scss">
 #app {
   margin: auto;
+  padding: 1em;
   color: #2c3e50;
+  background-color: rgb(245, 245, 245);
+  height: calc(100% - 68px);
   text-align: center;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.hello {
+  font-weight: bold;
+  float: right;
+  font-size: 0.8rem;
 }
 </style>

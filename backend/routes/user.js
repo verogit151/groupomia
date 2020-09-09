@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const userCtrl = require('../controllers/user')
+const validatePwd = require('../middleware/validatePwd')
 
-router.post('/signup', userCtrl.signup)
+router.post('/signup', validatePwd, userCtrl.signup)
 router.get('/', userCtrl.getAllUser)
 router.get('/:id', userCtrl.getOneUser)
 router.post('/login', userCtrl.login)

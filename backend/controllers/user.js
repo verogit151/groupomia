@@ -20,7 +20,7 @@ exports.signup = (req, res, next) => {
           password: hash,
           surname: reqUser.surname,
           firstname: reqUser.firstname,
-          karma: 1,
+          karma: 0,
           role_id: 2
         })
 
@@ -36,10 +36,13 @@ exports.signup = (req, res, next) => {
             return res.status(201).json({ 
                       userId: data.id,
                       token: jwt.sign({ userId: data.id }, 'RANDOM_TOKEN_SECRET', { expiresIn: '24h' }),
-                      roleId: data.role_id
-            })
-          //next()
+                      roleId: data.role_id,
+                      firstname: data.firstname,
+                      surname: data.surname,
+                      karma: data.karma
+                    })
         })
+          //next()
       })
       .catch(error => res.status(500).json({ error }))
 }
@@ -51,6 +54,7 @@ exports.login = (req, res) => {
       message: "Content can not be empty!"
     })
   }
+  else {console.log("else")}
   User.findByEmail(reqUser.email, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -76,7 +80,10 @@ exports.login = (req, res) => {
                 'RANDOM_TOKEN_SECRET',
                 { expiresIn: '24h' }
               ),
-              roleId: data.role_id
+              roleId: data.role_id,
+              firstname: data.firstname,
+              surname: data.surname,
+              karma: data.karma
             })
           })
           .catch(error => res.status(500).json({ error }))
