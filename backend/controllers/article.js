@@ -37,6 +37,8 @@ exports.createArticle = (req, res, next) => {
 
 //Affichage des articles
 exports.getAllArticle = (req, res, next) => {
+  console.log("api")
+  console.log(req.body)
   ArticleU.getAll(req.params.id, (err, data) => {
     if (err)
     res.status(500).send({

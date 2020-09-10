@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {mapState} from "vuex"
 
 export default {
@@ -63,7 +64,8 @@ export default {
     },
     logout() {
       this.authenticated = false
-      localStorage.clear()
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common['Authorization']
     },
   }, 
   computed: {

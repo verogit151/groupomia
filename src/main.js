@@ -14,6 +14,12 @@ Vue.use(BootstrapVueIcons)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+// Authorization
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.axios.defaults.headers.common['Authorization'] = token
+}
+
 Vue.config.productionTip = false
 
 library.add(fas)

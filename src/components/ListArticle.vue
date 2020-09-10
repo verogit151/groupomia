@@ -70,7 +70,7 @@ export default {
   methods: {
     // Suppression d'un article (Modération Administrateur)
     deleteArticle(articles_id) {
-      axios.delete("http://localhost:3000/api/articles/" + articles_id, 
+      axios.delete("http://localhost:3000/api/articles/" + articles_id, { userId:this.users.userId }
         ).then(() => {
             this.$store.dispatch('loadPosts', this.users.userId)
             console.log("article supprimé")
@@ -84,7 +84,7 @@ export default {
             articles_id: articles_id,
             users_id: this.users.userId
       }
-      axios.post("http://localhost:3000/api/articles/like", { like:likePost },
+      axios.post("http://localhost:3000/api/articles/like", { like:likePost, userId:this.users.userId },
         ).then(() => {
             this.$store.dispatch('loadPosts', this.users.userId)
         }).catch(() => {
@@ -97,7 +97,7 @@ export default {
             articles_id: articles_id,
             users_id: this.users.userId
       }
-      axios.post("http://localhost:3000/api/articles/dislike", { dislike:dislikePost },
+      axios.post("http://localhost:3000/api/articles/dislike", { dislike:dislikePost, userId:this.users.userId },
         ).then(() => {
             this.$store.dispatch('loadPosts', this.users.userId)
         }).catch(() => {

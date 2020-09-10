@@ -123,12 +123,13 @@ export default {
               content: this.editor.getHTML(),
               image: "",
               author_users_id: this.users.userId,
-              date: moment().format(),
-            }
-          }, 
-          ).then(response => {
+              date: moment().format()},
+              userId:this.users.userId,
+          }).then(response => {
               this.articles_id = response.data.id
-              this.saveImage(formData)
+              if (this.selectedFile) {
+                this.saveImage(formData)
+              }
               this.$store.dispatch('loadPosts')
               this.resetForm()
           }).catch(() => {

@@ -48,7 +48,7 @@ User.findByEmail = (emailUser, result) => {
         }
         else {
           console.log("utilisateur non trouvé: ")
-          result(err, null)
+          result({ kind: "not_found" }, null)
           return
         }
     }
@@ -67,6 +67,11 @@ User.findOne = (userId, result) => {
             console.log("Utilisateur trouvé: ", res[0])
             result(null, res[0])
             return
+        }
+        else {
+          console.log("utilisateur non trouvé: ")
+          result({ kind: "not_found" }, null)
+          return
         }
     }
   })

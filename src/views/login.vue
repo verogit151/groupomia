@@ -54,10 +54,12 @@ export default {
                     .then(() => {
                          this.$emit("authenticated", true)
                         this.$router.replace({ name: "home" })
-                    }).catch(() => {
+                    }).catch((error) => {
+                        this.$emit("authenticated", false)
                         this.errorMessage = "L'email et/ou le mot de passe est incorrect"
                     })
                 } else {
+                    this.$emit("authenticated", false)
                     this.errorMessage = "L'email et/ou le mot de passe est incorrect"
                 }
             }
@@ -83,7 +85,6 @@ export default {
         text-align: left;
     }
     .row {
-        /* margin-top: 0.5em; */
         margin-right: 0 !important;
         margin-left: 0 !important;
     }
@@ -102,9 +103,6 @@ export default {
         float: right;
         margin: 0.5em !important;
     }
-    /* .btn {
-        border-radius: 0.5em;
-    } */
     .error { color: tomato; }
 
     @media all and (max-width: 768px) {

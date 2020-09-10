@@ -68,7 +68,7 @@ export default {
         // Ajout d'un article
         addComment(newComment) {
           console.log(newComment)
-          axios.post("http://localhost:3000/api/articles/comment", { comment:newComment }, 
+          axios.post("http://localhost:3000/api/articles/comment", { comment:newComment, userId:this.users.userId, }, 
           ).then(response => {
               this.user = response
               this.listComments()
@@ -79,7 +79,7 @@ export default {
         },
         // Suppression d'un commentaire (modération administrateur)
         deleteComment(comment_id) {
-          axios.delete("http://localhost:3000/api/articles/comment/" + comment_id, 
+          axios.delete("http://localhost:3000/api/articles/comment/" + comment_id, { userId:this.users.userId, }
             ).then(() => {
                 this.listComments()
                 console.log("commentaire supprimé")

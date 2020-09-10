@@ -70,12 +70,12 @@ exports.login = (req, res) => {
         })
       }
     } else {
-      
-      bcrypt.compare(reqUser.password, data.password)
+        bcrypt.compare(reqUser.password, data.password)
           .then(valid => {
             if (!valid) {
               res.status(401).send({ message: `Mot de passe invalide`})
             }
+            else {
             res.status(200).json({
               userId: data.id,
               token: jwt.sign(
@@ -87,9 +87,10 @@ exports.login = (req, res) => {
               firstname: data.firstname,
               surname: data.surname,
               karma: data.karma
-            })
+            })}
           })
-          .catch(error => res.status(500).json({ error }))
+          .catch(error => {
+            res.status(500).json({ error })})
     }
   })
 }
@@ -126,19 +127,6 @@ exports.getAllUser = (req, res) => {
       else  res.send(data)
   })
 }
-
-
-//Modification d'une sauce
-// exports.modifySauce = (req, res, next) => {
-//   const sauceObject = req.file ?
-//     {
-//       ...JSON.parse(req.body.sauce),
-//       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//     } : { ...req.body };
-//   Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id })
-//       .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-//       .catch(error => res.status(400).json({ error }));
-// };
 
 //Modification de l'utilisateur
 exports.modifyUser = (req, res) => {

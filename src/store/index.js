@@ -7,11 +7,12 @@ Vue.use(Vuex, axios)
 export default new Vuex.Store({
 	state: {
 		posts: [],
-		users: []
+		users: [],
+		token: localStorage.getItem('token') || ''
 	},
 	actions: {
 		loadPosts({commit}, userId) {
-			axios.get("http://localhost:3000/api/articles/" + userId
+			axios.get("http://localhost:3000/api/articles/" + userId,
                 ).then(response => {
                     let posts = response.data
 					commit('SET_POSTS', posts)
@@ -20,13 +21,21 @@ export default new Vuex.Store({
 				})
 		},
 		login({commit}, user) {
-			return axios.post("http://localhost:3000/api/auth/login/", {  user:user 
-                }).then(response => {
+			return new Promise((resolve, reject) => {
+				axios.post("http://localhost:3000/api/auth/login/", {  user:user 
+				}).then((response) => {
 					let users = response.data
+					const token = response.data.token
+					localStorage.setItem('token',token)
+					axios.defaults.headers.common['Authorization'] = token
 					commit('SET_USERS', users)
-				}).catch(error => {
+					resolve(response)
+				}).catch((error) => {
+					localStorage.removeItem('token')
 					console.log(error)
+					reject(error)
 				})
+			})
 		},
 		signup({commit}, user) {
 			return axios.post("http://localhost:3000/api/auth/signup/", {  user:user 
