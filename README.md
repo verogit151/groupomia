@@ -1,24 +1,20 @@
 # groupomia-rse
+Création d'un réseau social d'entreprise
 
-## Project setup
-```
-npm install
-```
+# technologies
+Backend : NodeJS, Express,  MySql
+Frontend : VueCLI, Vuex
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# development server
+Backend : nodemon server
+Frontend : npm run serve
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# base de données
+Dump : groupomia_dump.sql
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# environnement : .env
+DB
+DB_USER
+DB_PASSWORD
+TOKEN_SECRET_KEY
+TOKEN_EXPIRATION

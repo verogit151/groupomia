@@ -1,7 +1,11 @@
+require('dotenv').config();
+const DB_SECRET_KEY = process.env.TOKEN_SECRET_KEY;
+const DB_EXPIRATION = process.env.TOKEN_EXPIRATION;
+
+const connection = require('../bddConnect')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-// const connection = require('../bddConnect')
 const User = require('../models/user.model')
 
 exports.signup = (req, res, next) => {
@@ -76,8 +80,8 @@ exports.login = (req, res) => {
               userId: data.id,
               token: jwt.sign(
                 { userId: data.id },
-                'RANDOM_TOKEN_SECRET',
-                { expiresIn: '24h' }
+                DB_SECRET_KEY,
+                { expiresIn: DB_EXPIRATION }
               ),
               roleId: data.role_id,
               firstname: data.firstname,

@@ -1,10 +1,10 @@
+const connection = require('../bddConnect')
 const Article = require('../models/article.model')
 const ArticleU = require('../models/articleU.model')
 const Comment = require('../models/comment.model')
 const CommentU = require('../models/commentU.model')
 const Like = require('../models/like.model')
 const fs = require('fs')
-// const { faSadCry } = require('@fortawesome/free-solid-svg-icons')
 
 //Ajout d'un article
 exports.createArticle = (req, res, next) => {
