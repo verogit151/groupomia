@@ -49,9 +49,7 @@ export default {
   data() {
     return {
       authenticated: false,
-    //   userId: localStorage.getItem("userId"),
-    //   roleId: localStorage.getItem("roleId"),
-    };
+    }
   },
   mounted() {
     if (!this.authenticated) {

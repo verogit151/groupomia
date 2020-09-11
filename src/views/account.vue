@@ -19,7 +19,7 @@
               <b-col cols=4><input type="text" v-model="users.surname" /></b-col>
             </b-row>
             <b-button type="button" v-on:click="updateUser()" class="bouton">Modifier</b-button>
-            <b-button type="button" v-if="users.role_id===2" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
+            <b-button type="button" v-if="users.roleId===2" v-on:click="deleteUser()" class="bouton">Supprimer</b-button> 
           </b-col>
         </b-row>
       </form>
@@ -47,7 +47,7 @@ export default {
     updateUser() {
       if(this.users.firstname != "" && this.users.surname != "" ) {
           const user = {firstname: this.users.firstname, surname: this.users.surname}
-          axios.put("http://localhost:3000/api/auth/"  + this.userId, {  user:user 
+          axios.put("http://localhost:3000/api/auth/"  + this.users.userId, {  user:user 
           }).then(response => {
               this.user = response
               console.log(response)
@@ -61,7 +61,7 @@ export default {
     },
     // Suppression du compte utilisateur
     deleteUser() {
-      axios.delete("http://localhost:3000/api/auth/" + this.userId
+      axios.delete("http://localhost:3000/api/auth/" + this.users.userId
         ).then(response => {
             this.user = response
             console.log(response)
