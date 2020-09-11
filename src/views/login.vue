@@ -55,6 +55,7 @@ export default {
                          this.$emit("authenticated", true)
                         this.$router.replace({ name: "home" })
                     }).catch((error) => {
+                        console.log(error)
                         this.$emit("authenticated", false)
                         this.errorMessage = "L'email et/ou le mot de passe est incorrect"
                     })

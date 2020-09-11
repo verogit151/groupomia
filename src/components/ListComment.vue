@@ -52,6 +52,11 @@ export default {
         required: true
       }
     },
+    watch: {
+      articleId: function() {
+        this.listComments()
+      }
+    },
     methods:{
         // Affichage des commentaires pour chaque article
         listComments() {

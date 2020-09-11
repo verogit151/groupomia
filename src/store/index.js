@@ -38,13 +38,21 @@ export default new Vuex.Store({
 			})
 		},
 		signup({commit}, user) {
-			return axios.post("http://localhost:3000/api/auth/signup/", {  user:user 
-                }).then(response => {
-					let users = response.data
-					commit('SET_USERS', users)
-				}).catch(error => {
-					console.log(error)
-				})
+			return new Promise((resolve, reject) => {
+				axios.post("http://localhost:3000/api/auth/signup/", {  user:user 
+					}).then(response => {
+						let users = response.data
+						const token = response.data.token
+						localStorage.setItem('token',token)
+						axios.defaults.headers.common['Authorization'] = token
+						commit('SET_USERS', users)
+						resolve(response)
+					}).catch(error => {
+						localStorage.removeItem('token')
+						console.log(error)
+						reject(error)
+					})
+			})
 		}
 	},
 	mutations: {
